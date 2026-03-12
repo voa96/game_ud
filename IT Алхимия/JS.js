@@ -19,7 +19,6 @@ const itemImages = {
     "код": "/IT Алхимия/картинка/код.svg",
     "дизайн": "/IT Алхимия/картинка/дизайн.svg",
     "сервер": "/IT Алхимия/картинка/сервер.svg",
-    
     "Сайт": "/IT Алхимия/картинка/сайт.svg",
     "Бэкенд": "/IT Алхимия/картинка/бэкенд.svg",
     "Дашборд": "/IT Алхимия/картинка/дашборд.svg",
@@ -196,7 +195,7 @@ function checkRecipe(item1, item2) {
     }
 }
 
-// ==================== СОЗДАНИЕ ЭЛЕМЕНТА НА ПОЛЕ (ИЗ СПИСКА) ====================
+
 function createItemField(itemId) {
     const field = document.querySelector('.collection_field');
     
@@ -219,13 +218,6 @@ function createItemField(itemId) {
     title.textContent = itemName;
     newItem.appendChild(title);
     
-    // Случайная позиция
-    const maxX = field.clientWidth - 120;
-    const maxY = field.clientHeight - 120;
-    newItem.style.position = 'absolute';
-    newItem.style.cursor = 'grab';
-    
-    // Делаем элемент перетаскиваемым
     makeFieldItemDraggable(newItem);
     
     field.appendChild(newItem);
@@ -251,47 +243,24 @@ function createResultField(resultName, left = 0, top = 0) {
     title.textContent = resultName;
     newItem.appendChild(title);
     
-    // Позиция (если передана - используем, иначе случайная)
     if (left && top) {
         newItem.style.left = left;
         newItem.style.top = top;
     } else {
-        const maxX = field.clientWidth - 120;
-        const maxY = field.clientHeight - 120;
-        newItem.style.left = Math.random() * maxX + 'px';
-        newItem.style.top = Math.random() * maxY + 'px';
+        newItem.style.left = 0
+        newItem.style.top = 0
     }
-    
-    newItem.style.position = 'absolute';
-    newItem.style.cursor = 'grab';
-    
-    // Анимация появления
-    newItem.style.animation = 'appear 0.3s ease';
-    
-    // Делаем элемент перетаскиваемым
     makeFieldItemDraggable(newItem);
     
     field.appendChild(newItem);
 }
 
-
-
-// ==================== ДОБАВЛЕНИЕ CSS СТИЛЕЙ ====================
-
-
-
-// ==================== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ ====================
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Находим все открытые элементы в левом списке
     const listItems = document.querySelectorAll('.items_list .item.open');
     
-    // Делаем их перетаскиваемыми
     listItems.forEach(item => draggableList(item));
     
-    // Настраиваем поле
     fieldSetup();
     
-    console.log('🎮 IT Алхимия загружена!');
-    console.log('Доступны элементы: Код, Дизайн, Сервер');
 });
