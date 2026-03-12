@@ -75,8 +75,14 @@
     border: solid black 1px;
     border-radius: 20px;
     background-color: aliceblue;
+    :hover{
+        cursor: grab;
+    }
+    :active{
+        cursor: grabbing;
+    }
 }
 .item_picture{
-        width: 100px;
+    width: 100px;
     height: 65px;
     }

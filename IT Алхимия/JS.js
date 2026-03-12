@@ -1,3 +1,4 @@
+// ==================== РЕЦЕПТЫ ====================
 const recipes = {
     "код,дизайн": "Сайт",
     "код,сервер": "Бэкенд",
@@ -5,28 +6,20 @@ const recipes = {
     "код,код": "Софт",
     "дизайн,дизайн": "Стиль",
     "сервер,сервер": "Сеть",
-    "Сайт,Бэкенд": "Интернет-магазин",
-    "Сайт,Стиль": "Приложение",
-    "Бэкенд,Сеть": "Облако",
-    "Дашборд,Данные": "Аналитика",
-    "Софт,Сеть": "Синхронизация",
-    "Сеть,Сервер": "Интернет",
-    "Сеть,Сигнал": "Антенна",  
-    "Приложение,Человек": "Пользователь", 
-    "Код,Человек": "Программист",
-    "Дизайн,Человек": "Дизайнер",
-    "Сервер,Человек": "Сисадмин"
+
+    "сайт,бэкенд": "Интернет-магазин",
+    "сайт,стиль": "Приложение",
+    "бэкенд,сеть": "Облако",
+    "дашборд,данные": "Аналитика",
+    "софт,сеть": "Синхронизация",
+    "сеть,сервер": "Интернет",
 };
 
 const itemImages = {
-    // Базовые
     "код": "/IT Алхимия/картинка/код.svg",
     "дизайн": "/IT Алхимия/картинка/дизайн.svg",
     "сервер": "/IT Алхимия/картинка/сервер.svg",
-    "сигнал": "/IT Алхимия/картинка/сигнал.svg",
-    "человек": "/IT Алхимия/картинка/человек.svg",
     
-    // Результаты
     "Сайт": "/IT Алхимия/картинка/сайт.svg",
     "Бэкенд": "/IT Алхимия/картинка/бэкенд.svg",
     "Дашборд": "/IT Алхимия/картинка/дашборд.svg",
@@ -39,46 +32,42 @@ const itemImages = {
     "Аналитика": "/IT Алхимия/картинка/аналитика.svg",
     "Синхронизация": "/IT Алхимия/картинка/синхронизация.svg",
     "Интернет": "/IT Алхимия/картинка/интернет.svg",
-    "Антенна": "/IT Алхимия/картинка/антенна.svg",
-    "Пользователь": "/IT Алхимия/картинка/пользователь.svg",
-    "Программист": "/IT Алхимия/картинка/программист.svg",
-    "Дизайнер": "/IT Алхимия/картинка/дизайнер.svg",
-    "Сисадмин": "/IT Алхимия/картинка/сисадмин.svg"
 };
 
 let draggedItem = null;      
-let draggedId = null;       
-let draggedType = null;     
+let draggedType = null;      
 let offsetX = 0;             
 let offsetY = 0;
+
 
 function getItemNameById(id) {
     const names = {
         'код': 'Код',
         'дизайн': 'Дизайн',
         'сервер': 'Сервер',
-        'сигнал': 'Сигнал',
-        'человек': 'Человек'
     };
     return names[id] || id;
 }
 
-function draggableList(item){
-    item.setAttribute('draggable', true)
-    item.addEventListener('dragstart', function(e){
-        draggedItem = this
-        draggedType = 'list'
+function draggableList(item) {
+    item.setAttribute('draggable', true);
+    
+    item.addEventListener('dragstart', function(e) {
+        draggedItem = this;
+        draggedType = 'list';
         e.dataTransfer.setData('text/plain', this.id);
-        console.log('Тащим:', this.id);
-    })
+        this.style.opacity = '0.5';
+    });
+    
     item.addEventListener('dragend', function(e) {
+        this.style.opacity = '1';
         draggedItem = null;
         draggedType = null;
     });
 }
-
-function fieldSetup(){
-    const field = document.querySelector('.collection_field')
+function fieldSetup() {
+    const field = document.querySelector('.collection_field');
+    
     field.addEventListener('dragover', function(e) {
         e.preventDefault();
         this.classList.add('drag-over');
@@ -96,13 +85,120 @@ function fieldSetup(){
         
         if (draggedType === 'list' && itemId) {
             createItemField(itemId);
-            console.log('Создали элемент на поле:', itemId);
         }
     });
 }
 
+
+function makeFieldItemDraggable(item) {
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
+    
+    if (!item.style.left) item.style.left = '0px';
+    if (!item.style.top) item.style.top = '0px';
+    
+    item.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        
+        isDragging = true;
+        draggedItem = this;
+        draggedType = 'field';
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = parseFloat(this.style.left);
+        startTop = parseFloat(this.style.top);
+        
+        this.style.zIndex = '1000';
+        this.style.opacity = '0.8';
+    });
+    
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging || !draggedItem) return;
+        
+        e.preventDefault();
+        
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        let newLeft = startLeft + dx;
+        let newTop = startTop + dy;
+        
+        const field = document.querySelector('.collection_field');
+        const fieldRect = field.getBoundingClientRect();
+        const itemRect = draggedItem.getBoundingClientRect();
+        
+        // Ограничиваем движение в пределах поля
+        newLeft = Math.max(0, Math.min(newLeft, fieldRect.width - itemRect.width));
+        newTop = Math.max(0, Math.min(newTop, fieldRect.height - itemRect.height));
+        
+        draggedItem.style.left = newLeft + 'px';
+        draggedItem.style.top = newTop + 'px';
+    });
+    
+    document.addEventListener('mouseup', function(e) {
+        if (isDragging && draggedItem) {
+            isDragging = false;
+            
+            draggedItem.style.zIndex = '1';
+            draggedItem.style.opacity = '1';
+            
+            checkCombination(draggedItem);
+            
+            draggedItem = null;
+            draggedType = null;
+        }
+    });
+}
+
+function checkCombination(item) {
+    const fieldItems = document.querySelectorAll('.collection_field .item_in_field');
+    
+    fieldItems.forEach(otherItem => {
+        if (otherItem === item) return;
+        
+        const rect1 = item.getBoundingClientRect();
+        const rect2 = otherItem.getBoundingClientRect();
+        if (!(rect1.right < rect2.left || 
+            rect1.left > rect2.right || 
+            rect1.bottom < rect2.top || 
+            rect1.top > rect2.bottom)) {
+            
+            checkRecipe(item, otherItem);
+        }
+    });
+}
+
+function checkRecipe(item1, item2) {
+    const name1 = item1.dataset.name.toLowerCase();
+    const name2 = item2.dataset.name.toLowerCase();
+    
+    const combination1 = `${name1},${name2}`;
+    const combination2 = `${name2},${name1}`;
+    
+    let result = recipes[combination1] || recipes[combination2];
+    
+    if (result) {
+        console.log(`✅ Рецепт найден: ${name1} + ${name2} = ${result}`);
+        
+        const left = item1.style.left;
+        const top = item1.style.top;
+        
+        item1.remove();
+        item2.remove();
+        
+        createResultField(result, left, top);
+        
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// ==================== СОЗДАНИЕ ЭЛЕМЕНТА НА ПОЛЕ (ИЗ СПИСКА) ====================
 function createItemField(itemId) {
-    const field = document.querySelector('.collection_field')
+    const field = document.querySelector('.collection_field');
     
     const itemName = getItemNameById(itemId);
     const imgSrc = itemImages[itemId] || '';
@@ -123,17 +219,79 @@ function createItemField(itemId) {
     title.textContent = itemName;
     newItem.appendChild(title);
     
+    // Случайная позиция
     const maxX = field.clientWidth - 120;
     const maxY = field.clientHeight - 120;
-    newItem.style.left = Math.random() * maxX + 'px';
-    newItem.style.top = Math.random() * maxY + 'px';
     newItem.style.position = 'absolute';
+    newItem.style.cursor = 'grab';
+    
+    // Делаем элемент перетаскиваемым
+    makeFieldItemDraggable(newItem);
     
     field.appendChild(newItem);
 }
 
+// ==================== СОЗДАНИЕ ЭЛЕМЕНТА-РЕЗУЛЬТАТА ====================
+function createResultField(resultName, left = 0, top = 0) {
+    const field = document.querySelector('.collection_field');
+    
+    const newItem = document.createElement('div');
+    newItem.className = 'item_in_field';
+    newItem.dataset.id = resultName;
+    newItem.dataset.name = resultName;
+    
+    const img = document.createElement('img');
+    img.className = 'item_picture';
+    img.src = itemImages[resultName] || '';
+    img.alt = resultName;
+    newItem.appendChild(img);
+    
+    const title = document.createElement('h2');
+    title.className = 'nameItem';
+    title.textContent = resultName;
+    newItem.appendChild(title);
+    
+    // Позиция (если передана - используем, иначе случайная)
+    if (left && top) {
+        newItem.style.left = left;
+        newItem.style.top = top;
+    } else {
+        const maxX = field.clientWidth - 120;
+        const maxY = field.clientHeight - 120;
+        newItem.style.left = Math.random() * maxX + 'px';
+        newItem.style.top = Math.random() * maxY + 'px';
+    }
+    
+    newItem.style.position = 'absolute';
+    newItem.style.cursor = 'grab';
+    
+    // Анимация появления
+    newItem.style.animation = 'appear 0.3s ease';
+    
+    // Делаем элемент перетаскиваемым
+    makeFieldItemDraggable(newItem);
+    
+    field.appendChild(newItem);
+}
+
+
+
+// ==================== ДОБАВЛЕНИЕ CSS СТИЛЕЙ ====================
+
+
+
+// ==================== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ ====================
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Находим все открытые элементы в левом списке
     const listItems = document.querySelectorAll('.items_list .item.open');
+    
+    // Делаем их перетаскиваемыми
     listItems.forEach(item => draggableList(item));
+    
+    // Настраиваем поле
     fieldSetup();
+    
+    console.log('🎮 IT Алхимия загружена!');
+    console.log('Доступны элементы: Код, Дизайн, Сервер');
 });
