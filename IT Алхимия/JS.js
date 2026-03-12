@@ -127,7 +127,6 @@ function makeFieldItemDraggable(item) {
         const fieldRect = field.getBoundingClientRect();
         const itemRect = draggedItem.getBoundingClientRect();
         
-        // Ограничиваем движение в пределах поля
         newLeft = Math.max(0, Math.min(newLeft, fieldRect.width - itemRect.width));
         newTop = Math.max(0, Math.min(newTop, fieldRect.height - itemRect.height));
         
@@ -223,7 +222,6 @@ function createItemField(itemId) {
     field.appendChild(newItem);
 }
 
-// ==================== СОЗДАНИЕ ЭЛЕМЕНТА-РЕЗУЛЬТАТА ====================
 function createResultField(resultName, left = 0, top = 0) {
     const field = document.querySelector('.collection_field');
     
