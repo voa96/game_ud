@@ -12,9 +12,9 @@
     width: 25%;
     height: 100vh;
     background-color: rgb(63 63 63);
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    grid-template-rows: repeat(10,1fr);
+    display: flex;
+    flex-direction: column;
+    /* grid-template-columns: 1fr; */
     gap: 20px;
     padding: 20px;
 }
@@ -27,11 +27,25 @@
         height: 100%;
     }
 }
+.closeItem{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+    height: auto;
+    .close{
+    background-color: rgba(101,101,101,1);
+    }
+}
+.openItem{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+    .open{
+        background-color: white;
+    }
+}
 .done{
     background-color: rgba(112,255,138,1);
-}
-.close{
-    background-color: rgba(101,101,101,1);
 }
 .open{
     background-color: rgba(217,217,217,1);

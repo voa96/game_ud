@@ -36,20 +36,37 @@ let offsetX = 0;
 let offsetY = 0;
 
 let openItem = ['код','дизайн','сервер']
-
 function checkItemList(e){
-    document.querySelector('.items_list').createElement('div')
+    let bbb = document.querySelector('.openItem')
+    let div = document.createElement('div')
+    div.id = e
+    div.classList = "item open"
+    div.innerHTML = `<img src="картинка/${e}.svg" alt=""></img>`
+    if(!openItem.includes(e))
+    {
+        openItem.push(e)
+        console.log(openItem);
+        draggableList(div)
+        bbb.appendChild(div)
+
+        deleteItem(e)
+    }
     
 }
 
+function deleteItem(e){
+
+    let iteme = e.toLowerCase()
+    let bbb = document.getElementById(`${iteme}`)
+    console.log(bbb)
+    if(bbb.getElementsByClassName('close')){
+        bbb.remove()
+    }
+}
 
 function getItemNameById(id) {
-    const names = {
-        'код': 'Код',
-        'дизайн': 'Дизайн',
-        'сервер': 'Сервер',
-    };
-    return names[id] || id;
+    let i = openItem.indexOf(id)
+    return openItem[i] || id;
 }
 
 function draggableList(item) {
@@ -181,7 +198,7 @@ function checkRecipe(item1, item2) {
     let result = recipes[combination1] || recipes[combination2];
     
     if (result) {
-        console.log(`✅ Рецепт найден: ${name1} + ${name2} = ${result}`);
+        console.log(`${name1} + ${name2} = ${result}`);
         
         const left = item1.style.left;
         const top = item1.style.top;
@@ -252,6 +269,9 @@ function createResultField(resultName, left = 0, top = 0) {
         newItem.style.left = 0
         newItem.style.top = 0
     }
+    checkItemList(resultName)
+    // console.log(resultName);
+    
     makeFieldItemDraggable(newItem);
     
     field.appendChild(newItem);
