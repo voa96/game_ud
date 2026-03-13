@@ -5,7 +5,6 @@ const recipes = {
     "код,код": "Софт",
     "дизайн,дизайн": "Стиль",
     "сервер,сервер": "Сеть",
-
     "сайт,бэкенд": "Интернет-магазин",
     "сайт,стиль": "Приложение",
     "бэкенд,сеть": "Облако",
@@ -30,10 +29,18 @@ const itemImages = {
     "Интернет": " картинка/интернет.svg",
 };
 
+
 let draggedItem = null;      
 let draggedType = null;      
 let offsetX = 0;             
 let offsetY = 0;
+
+let openItem = ['код','дизайн','сервер']
+
+function checkItemList(e){
+    document.querySelector('.items_list').createElement('div')
+    
+}
 
 
 function getItemNameById(id) {
