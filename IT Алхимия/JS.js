@@ -12,6 +12,9 @@ const recipes = {
     "сеть,сервер": "Интернет",
     "приложение,бэкенд": "API",
     "интернет-магазин,сеть": "Маркетплейс",
+    "приложение,сеть": "Игра",
+    "приложение,стиль": "Илюстраторр",
+    "api,бэкенд":"БазаДанных"
 };
 
 const itemImages = {
@@ -31,6 +34,9 @@ const itemImages = {
     "Интернет": " картинка/интернет.svg",
     "API": " картинка/API.svg",
     "Маркетплейс": " картинка/маркетплейс.svg",
+    "Игра":"картинка/игра.svg",
+    "Илюстраторр":"картинка/илюстраторр.svg",
+    "БазаДанных":"картинка/базаданных.svg",
 };
 
 
@@ -52,11 +58,17 @@ function checkItemList(e){
         console.log(openItem);
         draggableList(div)
         bbb.appendChild(div)
-
         deleteItem(e)
     }
     
 }
+// счетчик
+function counter(){
+    let counter = document.getElementById("counter")
+    counter.textContent = `${openItem.length-3}/16`
+}
+// 
+
 
 function deleteItem(e){
 
@@ -66,6 +78,7 @@ function deleteItem(e){
     if(bbb.getElementsByClassName('close')){
         bbb.remove()
     }
+    counter()
 }
 
 function getItemNameById(id) {
