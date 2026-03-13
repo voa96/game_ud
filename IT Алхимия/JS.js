@@ -242,7 +242,7 @@ function createItemField(itemId) {
     img.alt = itemName;
     newItem.appendChild(img);
     
-    const title = document.createElement('h2');
+    const title = document.createElement('h3');
     title.className = 'nameItem';
     title.textContent = itemName;
     newItem.appendChild(title);
@@ -266,7 +266,7 @@ function createResultField(resultName, left = 0, top = 0) {
     img.alt = resultName;
     newItem.appendChild(img);
     
-    const title = document.createElement('h2');
+    const title = document.createElement('h3');
     title.className = 'nameItem';
     title.textContent = resultName;
     newItem.appendChild(title);
