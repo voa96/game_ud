@@ -97,6 +97,7 @@
     :active{
         cursor: grabbing;
     }
+    padding: 3px;
 }
 .item_picture{
     width: 100px;
