@@ -10,6 +10,8 @@ const recipes = {
     "бэкенд,сеть": "Облако",
     "софт,сеть": "Синхронизация",
     "сеть,сервер": "Интернет",
+    "приложение,бэкенд": "API",
+    "интернет-магазин,сеть": "Маркетплейс",
 };
 
 const itemImages = {
@@ -27,6 +29,8 @@ const itemImages = {
     "Облако": " картинка/облако.svg",
     "Синхронизация": " картинка/синхронизация.svg",
     "Интернет": " картинка/интернет.svg",
+    "API": " картинка/API.svg",
+    "Маркетплейс": " картинка/маркетплейс.svg",
 };
 
 
@@ -173,6 +177,16 @@ function makeFieldItemDraggable(item) {
 function checkCombination(item) {
     const fieldItems = document.querySelectorAll('.collection_field .item_in_field');
     
+    const basketRect = basket.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    
+    if (!(itemRect.right < basketRect.left || 
+        itemRect.left > basketRect.right || 
+        itemRect.bottom < basketRect.top || 
+        itemRect.top > basketRect.bottom)) {
+        item.remove();
+        return;
+    }
     fieldItems.forEach(otherItem => {
         if (otherItem === item) return;
         
@@ -207,11 +221,6 @@ function checkRecipe(item1, item2) {
         item2.remove();
         
         createResultField(result, left, top);
-        
-        
-        return true;
-    } else {
-        return false;
     }
 }
 
