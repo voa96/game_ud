@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuest } from '../../context/questContext';
 import '../../styles/alchemy.css'
+import { preconnect } from 'react-dom';
 
 const Alchemy = ({onComplete}) => {
     const [recipes, setRecipes] = useState({
@@ -19,9 +20,10 @@ const Alchemy = ({onComplete}) => {
         "приложение,бэкенд": "API",
         "интернет-магазин,сеть": "Маркетплейс",
         "приложение,сеть": "Игра",
-        "приложение,стиль": "Илюстраторр",
+        "приложение,стиль": "Илюстратор",
         "api,бэкенд": "БазаДанных",
     });
+    
     
     const [itemImages, setItemImages] = useState({
         "код": "/images/код.svg",
@@ -47,6 +49,25 @@ const Alchemy = ({onComplete}) => {
         "мкит": "images/mkit_logo.svg",
         "МКИТ": "images/mkit_logo.svg",
     });
+    const [checkAvalibal,setAvailible] = useState({
+        'код':['сайт','бэкенд','софт'],
+        'дизайн':['стиль','сайт'],
+        'сервер':['бэкенд','дашборд','сеть','интернет'],
+        'бэкенд':['интернет-магазин','облако','api','базаданных'],
+        'софт':['синхронизация'],
+        'стиль':['приложение','илюстратор'],
+        'сеть':['облако','синхронизация','интернет','маркетплейс','игра'],
+        'интернет-магазин':['маркетплейс'],
+        'приложение':['api','игра','илюстратор'],
+        'облако':[],
+        'синхронизация':[],
+        'интернет':[],
+        'api':['базаданных'],
+        'маркетплейс':[],
+        'игра':[],
+        'илюстратор':[],
+        'базаданных':[],
+    })
 
     const allPossibleItems = [
         'код', 'дизайн', 'сервер', 'сайт', 'бэкенд', 'дашборд',
@@ -93,6 +114,18 @@ const Alchemy = ({onComplete}) => {
         };
         return displayMap[name] || name.charAt(0).toUpperCase() + name.slice(1);
     };
+    // проверка завершенных элементов
+    function checkingCompletedItems(itemName){
+        setAvailible(prevState =>{
+            const newState = {...prevState}
+            for(let key in newState){
+                if(newState[key].includes(itemName)){
+                    newState[key].splice(newState[key].findIndex(item => item === itemName),1)
+                }
+            }
+            return newState
+        })
+    }
 
     // Добавление нового предмета в коллекцию доступных
     const addToAvailableItems = useCallback((itemName) => {
@@ -101,6 +134,8 @@ const Alchemy = ({onComplete}) => {
             setAvailableItems([...new Set(availableItems)]);
             setAvailableItems(prev => [...prev, normalizedName]);
         }
+        //вызов для удаления
+        checkingCompletedItems(itemName)
     }, [availableItems]);
 
     // Создание предмета на поле
